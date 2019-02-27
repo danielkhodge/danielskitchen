@@ -1,4 +1,4 @@
 package com.hodge.daniel;
 
-public class Pastrys {
+public class Pastry {
 }
