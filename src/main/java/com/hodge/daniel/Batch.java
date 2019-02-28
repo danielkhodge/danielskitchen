@@ -8,6 +8,16 @@ public class Batch {
     private List<Dough> doughsInBatch = new ArrayList<>();
     private List<Pastry> pastries = new ArrayList<>();
 
+    private Preparation preparationStatus;
+
+    public Preparation getPreperationStatus() {
+        return preparationStatus;
+    }
+
+    public void setPreperationStatus(Preparation preparationStatus) {
+        this.preparationStatus = preparationStatus;
+    }
+
     public void addDough(Dough d) {
         if (doughsInBatch.size() >= batchSize) {
             throw new RuntimeException("This batch is already full: " + batchSize);

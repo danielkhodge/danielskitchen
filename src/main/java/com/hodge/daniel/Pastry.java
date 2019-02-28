@@ -1,4 +1,8 @@
 package com.hodge.daniel;
 
-public class Pastry {
+public abstract class Pastry implements Cookable{
+    @Override
+    public void cook() {
+
+    }
 }
