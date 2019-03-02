@@ -32,4 +32,12 @@ public class Batch {
     public void addPastry(Pastry p) {
         pastries.add(p);
     }
+
+    public List<Pastry> getPastries() {
+        return pastries;
+    }
+
+    public List<Dough> getDoughsInBatch() {
+        return doughsInBatch;
+    }
 }
