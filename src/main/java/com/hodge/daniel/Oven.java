@@ -9,14 +9,14 @@ public class Oven {
 
         for(Dough d: b.getDoughsInBatch()) {
             Pastry pastry = null;
-            d.getType();
-            if (d.equals("DONUT")) {
+            String type = d.getType();
+            if (type.equals("DONUT")) {
                 pastry = new Donut();
             }
-            else if (d.equals("CROISSANT")) {
+            else if (type.equals("CROISSANT")) {
                 pastry = new Croissant();
             }
-            else if (d.equals("DANISH")) {
+            else if (type.equals("DANISH")) {
                 pastry = new Danish();
             }
 
@@ -36,6 +36,7 @@ public class Oven {
 
             b.addPastry(pastry);
         }
+        b.setPreparationStatus(Preparation.Cooked);
         c.batchComplete(b);
 
 

@@ -1,6 +1,7 @@
 package com.hodge.daniel;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,10 +35,10 @@ public class Cook {
                 Properties p = new Properties();
                 InputStream in = new FileInputStream(myFiles[i]);
                 p.load(in);
-                String type = p.getProperty("type");
+
                 Dough d = new Dough();
 
-
+                String type = p.getProperty("type");
                 int butter = Integer.parseInt(p.getProperty("butter"));
                 int flour = Integer.parseInt(p.getProperty("flour"));
                 int salt = Integer.parseInt(p.getProperty("salt"));
@@ -49,26 +50,41 @@ public class Cook {
                 d.setSalt(salt);
                 d.setJam(jam);
                 d.setSugar(sugar);
+                d.setType(type);
 
-                batch.addDough(d);
+                if (!batch.addDough(d)) {
+                    OvenFactory.getOven().cook(batch, this);
+                    batch = new Batch();
+                    batch.addDough(d);
+                }
 
             } catch (IOException e) {
                 LOG.error("Could not read " + myFiles[i].getAbsolutePath());
             }
         }
-        OvenFactory.getOven().cook(batch, this);
+
+        if (batch.getPreparationStatus() == Preparation.Raw) {
+            OvenFactory.getOven().cook(batch, this);
+        }
     }
 
 
     public void batchComplete(Batch batch) {
         for(Pastry p: batch.getPastries()) {
+            FileWriter writer = null;
             try {
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 String json = gson.toJson(p);
                 String filename = "C:\\temp\\kitchen\\output\\" + UUID.randomUUID().toString().substring(0, 8) + ".pastry.json";
-                new FileWriter(filename).write(json);
+                writer = new FileWriter(filename);
+                writer.write(json);
             } catch (IOException e){
                 e.printStackTrace();
+            } finally {
+                if (writer != null) {
+                    try {writer.close();}
+                    catch(Exception e){}
+                }
             }
         }
     }
